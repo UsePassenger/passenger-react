@@ -1,0 +1,19 @@
+.passengerContent {
+  max-width: 50%;
+  margin: 0 auto;
+}
+
+.passengerFilter {
+  display: -ms-flex;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.passengerFilter > div {
+  width: 50%;
+  padding: 10px;
+}
+
+.passengerFilter > div:first-child {
+  margin-right: 20px;
+}

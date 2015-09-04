@@ -2,6 +2,27 @@ import React, { Component } from 'react';
 
 import superagent from 'superagent';
 
+require('react-widgets/dist/css/react-widgets.css');
+require('./stylesheets/main.css');
+
+var DateTimePicker = require('react-widgets/lib/DateTimePicker');
+var ComboBox = require('react-widgets/lib/ComboBox');
+
+var stationObjects = [
+  {
+    stationId: 0,
+    stationName: "Scarsdale"
+  },
+  {
+    stationId: 0,
+    stationName: "Hartsdale"
+  },
+  {
+    stationId: 0,
+    stationName: "Grand-Central"
+  }
+];
+
 export default class App extends Component {
   render() {
     return (
@@ -10,23 +31,50 @@ export default class App extends Component {
   }
 }
 
+// http://stackoverflow.com/a/3067896/1185578
+function getDayStamp (date) {
+  var yyyy = date.getFullYear().toString();
+  var mm = (date.getMonth()+1).toString(); // getMonth() is zero-based
+  var dd  = date.getDate().toString();
+  return yyyy + (mm[1]?mm:"0"+mm[0]) + (dd[1]?dd:"0"+dd[0]); // padding
+}
+
+function getTimeStamp (date) {
+  var hours = date.getHours();
+  var hoursAdjusted = hours % 12;
+  var ampm = hours < 12 ? "AM" : "PM";
+
+  var hh = hoursAdjusted.toString();
+  var mm = date.getMinutes().toString();
+  return (hh[1]?hh:"0"+hh[0]) + ":" + (mm[1]?mm:"0"+mm[0]) + ampm;
+}
+
+function filterStation(station, value) { 
+  var stationName = station.stationName.toLowerCase()
+    , search      = value.toLowerCase();
+
+  return stationName.indexOf(search) >= 0;
+}
+
 export var PassengerContent = React.createClass({
   loadRouteEventPairsFromServer: function(field, val) {
     var baseUrl = "http://localhost:3001";
 
     var queryParams = {
-      departure: this.state.departure.toLowerCase(),
-      destination: this.state.destination.toLowerCase()
+      departure: this.state.departure,
+      destination: this.state.destination,
+      date: this.state.date
     };
 
     if (field && val) {
-      queryParams[field] = val.toLowerCase();
+      queryParams[field] = val;
     }
 
     superagent
       .get(baseUrl 
         + "?departure=" + queryParams.departure.toLowerCase()
-        + "&destination=" + queryParams.destination.toLowerCase())
+        + "&destination=" + queryParams.destination.toLowerCase()
+        + "&daystamp=" + getDayStamp(queryParams.date))
       .end(function(err, res) {
         if (err) {
           console.log(err);
@@ -35,7 +83,18 @@ export var PassengerContent = React.createClass({
           
           var newState = {};
           newState[field] = val;
+
+          var routeEventPairs = res.body.map(({departure, destination}) => {
+            departure.date = new Date(departure.date);
+            destination.date = new Date(destination.date);
+            return {
+              departure: departure,
+              destination: destination,
+            };
+          });
+
           newState.data = res.body;
+
           this.setState(newState);
         }
       }.bind(this));
@@ -44,7 +103,7 @@ export var PassengerContent = React.createClass({
     return {
       departure: "Grand-Central",
       destination: "Scarsdale",
-      date: "Aug 18 00:00:00 EDT 2015",
+      date: new Date(),
       data: []
     };
   },
@@ -100,10 +159,10 @@ var RouteEventPair = React.createClass({
     return (
       <tr className="routeEventPair">
         <td className="routeEventPairDepartureTime">
-          Departure: {this.props.departure.stationName}, {this.props.departure.date}
+          Departure: {this.props.departure.stationName}, {getTimeStamp(this.props.departure.date)}
         </td>
         <td className="routeEventPairDestinationTime">
-          Destination: {this.props.destination.stationName}, {this.props.destination.date}
+          Destination: {this.props.destination.stationName}, {getTimeStamp(this.props.destination.date)}
         </td>
       </tr>
     );
@@ -114,23 +173,35 @@ var PassengerFilter = React.createClass({
   render: function() {
     return (
       <div className="passengerFilter">
-        <h2 className="passengerFilterDepartureStation">
-          Departure: <select onChange={event => this.props.onChange('departure', event.target.value)} value={this.props.data.departure}>
-            <option value="Hartsdale">Hartsdale</option>
-            <option value="Scarsdale">Scarsdale</option>
-            <option value="Grand-Central">Grand-Central</option>
-          </select>
-        </h2>
-        <h2 className="passengerFilterDestinationStation">
-          Destination: <select onChange={event => this.props.onChange('destination', event.target.value)} value={this.props.data.destination}>
-            <option value="Hartsdale">Hartsdale</option>
-            <option value="Scarsdale">Scarsdale</option>
-            <option value="Grand-Central">Grand-Central</option>
-          </select>
-        </h2>
-        <h2 className="passengerFilterDepartureDate">
-          Date: {this.props.data.date}
-        </h2>
+        <div className="passengerFilter-left">
+          <div className="passengerFilterDepartureStation">
+            <label>Departure</label>
+            <ComboBox 
+              data={stationObjects}
+              value={this.props.data.departure} 
+              valueField='stationName' textField='stationName'
+              filter={filterStation}
+              onChange={value => this.props.onChange('departure', value)} />
+          </div>
+          <div className="passengerFilterDestinationStation">
+            <label>Destination</label>
+            <ComboBox 
+              data={stationObjects}
+              value={this.props.data.destination}
+              valueField='stationName' textField='stationName'
+              filter={filterStation}
+              onChange={value => this.props.onChange('destination', value)} />
+          </div>
+        </div>
+        <div className="passengerFilter-right">
+          <div className="passengerFilterDepartureDate">
+            <label>Date</label>
+            <DateTimePicker 
+              time={false}
+              value={this.props.data.date}
+              onChange={date => this.props.onChange('date', date)} />
+          </div>
+        </div>
       </div>
     );
   }
