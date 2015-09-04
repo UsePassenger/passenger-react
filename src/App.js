@@ -1,4 +1,14 @@
-var PassengerContent = React.createClass({
+import React, { Component } from 'react';
+
+export default class App extends Component {
+  render() {
+    return (
+      <h1>Hello, world!</h1>
+    );
+  }
+}
+
+export var PassengerContent = React.createClass({
   getInitialState: function() {
     return {
       filter: {
@@ -114,8 +124,3 @@ var PassengerFilter = React.createClass({
     );
   }
 });
-
-React.render(
-  <PassengerContent />,
-  document.getElementById('content')
-);
