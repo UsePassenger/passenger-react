@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import superagent from 'superagent';
+
 export default class App extends Component {
   render() {
     return (
@@ -9,56 +11,65 @@ export default class App extends Component {
 }
 
 export var PassengerContent = React.createClass({
+  loadRouteEventPairsFromServer: function(field, val) {
+    var baseUrl = "http://localhost:3001";
+
+    var queryParams = {
+      departure: this.state.departure.toLowerCase(),
+      destination: this.state.destination.toLowerCase()
+    };
+
+    if (field && val) {
+      queryParams[field] = val.toLowerCase();
+    }
+
+    superagent
+      .get(baseUrl 
+        + "?departure=" + queryParams.departure.toLowerCase()
+        + "&destination=" + queryParams.destination.toLowerCase())
+      .end(function(err, res) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(res);
+          
+          var newState = {};
+          newState[field] = val;
+          newState.data = res.body;
+          this.setState(newState);
+        }
+      }.bind(this));
+  },
   getInitialState: function() {
     return {
-      filter: {
-        departure: "Grand Central",
-        destination: "Scarsdale",
-        date: "Aug 18 00:00:00 EDT 2015"
-      },
-      routeEventPairs: [
-        {
-          departure: {
-            date: "Aug 18 21:30:00 EDT 2015",
-            stationName: "Grand Central",
-            stationId: 1,
-            routeId: 1,
-            directionId: 0
-          },
-          destination: {
-            date: "Aug 18 23:30:00 EDT 2015",
-            stationName: "Scarsdale",
-            stationId: 2,
-            routeId: 1,
-            directionId: 0
-          }
-        },
-        {
-          departure: {
-            date: "Aug 18 21:30:00 EDT 2015",
-            stationName: "Grand Central",
-            stationId: 1,
-            routeId: 1,
-            directionId: 0
-          },
-          destination: {
-            date: "Aug 18 23:30:00 EDT 2015",
-            stationName: "Scarsdale",
-            stationId: 2,
-            routeId: 1,
-            directionId: 0
-          }
-        }
-      ]
+      departure: "Grand-Central",
+      destination: "Scarsdale",
+      date: "Aug 18 00:00:00 EDT 2015",
+      data: []
     };
   },
+  componentDidMount: function() {
+    this.loadRouteEventPairsFromServer();
+  },
+  onChange: function (field, newValue) {
+    console.log(arguments);
+    this.loadRouteEventPairsFromServer(field, newValue);
+  },
   render: function() {
+    var routeEventPairs = this.state.data;
+
+    console.log("render", this.state);
+    var filteredRouteEventPairs = routeEventPairs.filter(({departure, destination}) => {
+      return departure.stationName === this.state.departure
+          && destination.stationName === this.state.destination;
+    });
+
     return (
       <div className="passengerContent">
         <h1>Filter</h1>
-        <PassengerFilter data={this.state.filter} />
+        <PassengerFilter data={this.state} onChange={this.onChange} />
         <h1>Time Table</h1>
-        <PassengerRouteEventPairsList data={this.state.routeEventPairs} />
+        <PassengerRouteEventPairsList data={filteredRouteEventPairs} />
       </div>
     );
   }
@@ -89,10 +100,10 @@ var RouteEventPair = React.createClass({
     return (
       <tr className="routeEventPair">
         <td className="routeEventPairDepartureTime">
-          Departure: {this.props.departure.date}
+          Departure: {this.props.departure.stationName}, {this.props.departure.date}
         </td>
         <td className="routeEventPairDestinationTime">
-          Destination: {this.props.destination.date}
+          Destination: {this.props.destination.stationName}, {this.props.destination.date}
         </td>
       </tr>
     );
@@ -104,17 +115,17 @@ var PassengerFilter = React.createClass({
     return (
       <div className="passengerFilter">
         <h2 className="passengerFilterDepartureStation">
-          Departure: <select>
+          Departure: <select onChange={event => this.props.onChange('departure', event.target.value)} value={this.props.data.departure}>
             <option value="Hartsdale">Hartsdale</option>
             <option value="Scarsdale">Scarsdale</option>
-            <option value="Grand-Central">Grand Central</option>
+            <option value="Grand-Central">Grand-Central</option>
           </select>
         </h2>
         <h2 className="passengerFilterDestinationStation">
-          Destination: <select>
+          Destination: <select onChange={event => this.props.onChange('destination', event.target.value)} value={this.props.data.destination}>
             <option value="Hartsdale">Hartsdale</option>
             <option value="Scarsdale">Scarsdale</option>
-            <option value="Grand-Central">Grand Central</option>
+            <option value="Grand-Central">Grand-Central</option>
           </select>
         </h2>
         <h2 className="passengerFilterDepartureDate">
