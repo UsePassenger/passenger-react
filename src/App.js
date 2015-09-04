@@ -8,6 +8,8 @@ require('./stylesheets/main.css');
 var DateTimePicker = require('react-widgets/lib/DateTimePicker');
 var ComboBox = require('react-widgets/lib/ComboBox');
 
+var baseUrl = "http://localhost:3001";
+
 var stationObjects = [
   {
     stationId: 0,
@@ -58,8 +60,6 @@ function filterStation(station, value) {
 
 export var PassengerContent = React.createClass({
   loadRouteEventPairsFromServer: function(field, val) {
-    var baseUrl = "http://localhost:3001";
-
     var queryParams = {
       departure: this.state.departure,
       destination: this.state.destination,
@@ -71,7 +71,7 @@ export var PassengerContent = React.createClass({
     }
 
     superagent
-      .get(baseUrl 
+      .get(baseUrl + '/route-event-pairs'
         + "?departure=" + queryParams.departure.toLowerCase()
         + "&destination=" + queryParams.destination.toLowerCase()
         + "&daystamp=" + getDayStamp(queryParams.date))
