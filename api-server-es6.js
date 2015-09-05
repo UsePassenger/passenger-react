@@ -20,7 +20,7 @@ function getDayStamp (date) {
 
 app.use(allowCrossDomain);
 
-app.get('/route-event-pairs', function (req, res) {
+app.get('/api/v1/mnr/search', function (req, res) {
 
   var r_departure = req.query.departure;
   var r_destination = req.query.destination;

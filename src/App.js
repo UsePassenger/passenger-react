@@ -8,22 +8,13 @@ require('./stylesheets/main.css');
 var DateTimePicker = require('react-widgets/lib/DateTimePicker');
 var ComboBox = require('react-widgets/lib/ComboBox');
 
-var baseUrl = "http://localhost:3001";
+// http://localhost:8000/api/v1/mnr/search?departure=1&destination=4&daystamp=20150904
+// var baseUrl = "http://localhost:3001";
+var baseUrl = "http://localhost:5050";
 
-var stationObjects = [
-  {
-    stationId: 0,
-    stationName: "Scarsdale"
-  },
-  {
-    stationId: 0,
-    stationName: "Hartsdale"
-  },
-  {
-    stationId: 0,
-    stationName: "Grand-Central"
-  }
-];
+var StationReference = require('./StationReference');
+var stationDictionary = StationReference.stationDictionary;
+var stationArray = StationReference.stationArray;
 
 export default class App extends Component {
   render() {
@@ -52,7 +43,7 @@ function getTimeStamp (date) {
 }
 
 function filterStation(station, value) { 
-  var stationName = station.stationName.toLowerCase()
+  var stationName = station.stop_name.toLowerCase()
     , search      = value.toLowerCase();
 
   return stationName.indexOf(search) >= 0;
@@ -66,14 +57,16 @@ export var PassengerContent = React.createClass({
       date: this.state.date
     };
 
+    console.log(arguments);
+
     if (field && val) {
       queryParams[field] = val;
     }
 
     superagent
-      .get(baseUrl + '/route-event-pairs'
-        + "?departure=" + queryParams.departure.toLowerCase()
-        + "&destination=" + queryParams.destination.toLowerCase()
+      .get(baseUrl + '/api/v1/mnr/search'
+        + "?departure=" + queryParams.departure
+        + "&destination=" + queryParams.destination
         + "&daystamp=" + getDayStamp(queryParams.date))
       .end(function(err, res) {
         if (err) {
@@ -84,7 +77,9 @@ export var PassengerContent = React.createClass({
           var newState = {};
           newState[field] = val;
 
-          var routeEventPairs = res.body.map(({departure, destination}) => {
+          var data = res.body.result;
+
+          var routeEventPairs = data.map(({departure, destination}) => {
             departure.date = new Date(departure.date);
             destination.date = new Date(destination.date);
             return {
@@ -93,7 +88,7 @@ export var PassengerContent = React.createClass({
             };
           });
 
-          newState.data = res.body;
+          newState.data = routeEventPairs;
 
           this.setState(newState);
         }
@@ -101,8 +96,8 @@ export var PassengerContent = React.createClass({
   },
   getInitialState: function() {
     return {
-      departure: "Grand-Central",
-      destination: "Scarsdale",
+      departure: "1",
+      destination: "4",
       date: new Date(),
       data: []
     };
@@ -117,18 +112,12 @@ export var PassengerContent = React.createClass({
   render: function() {
     var routeEventPairs = this.state.data;
 
-    console.log("render", this.state);
-    var filteredRouteEventPairs = routeEventPairs.filter(({departure, destination}) => {
-      return departure.stationName === this.state.departure
-          && destination.stationName === this.state.destination;
-    });
-
     return (
       <div className="passengerContent">
         <h1>Filter</h1>
         <PassengerFilter data={this.state} onChange={this.onChange} />
         <h1>Time Table</h1>
-        <PassengerRouteEventPairsList data={filteredRouteEventPairs} />
+        <PassengerRouteEventPairsList data={routeEventPairs} />
       </div>
     );
   }
@@ -159,10 +148,10 @@ var RouteEventPair = React.createClass({
     return (
       <tr className="routeEventPair">
         <td className="routeEventPairDepartureTime">
-          Departure: {this.props.departure.stationName}, {getTimeStamp(this.props.departure.date)}
+          Departure: {stationDictionary[this.props.departure.stop_id].stop_name}, {this.props.departure.departure_time}
         </td>
         <td className="routeEventPairDestinationTime">
-          Destination: {this.props.destination.stationName}, {getTimeStamp(this.props.destination.date)}
+          Destination: {stationDictionary[this.props.destination.stop_id].stop_name}, {this.props.destination.departure_time}
         </td>
       </tr>
     );
@@ -177,20 +166,20 @@ var PassengerFilter = React.createClass({
           <div className="passengerFilterDepartureStation">
             <label>Departure</label>
             <ComboBox 
-              data={stationObjects}
+              data={stationArray}
               value={this.props.data.departure} 
-              valueField='stationName' textField='stationName'
+              valueField='stop_id' textField='stop_name'
               filter={filterStation}
-              onChange={value => this.props.onChange('departure', value)} />
+              onChange={station => this.props.onChange('departure', station.stop_id)} />
           </div>
           <div className="passengerFilterDestinationStation">
             <label>Destination</label>
             <ComboBox 
-              data={stationObjects}
+              data={stationArray}
               value={this.props.data.destination}
-              valueField='stationName' textField='stationName'
+              valueField='stop_id' textField='stop_name'
               filter={filterStation}
-              onChange={value => this.props.onChange('destination', value)} />
+              onChange={station => this.props.onChange('destination', station.stop_id)} />
           </div>
         </div>
         <div className="passengerFilter-right">
