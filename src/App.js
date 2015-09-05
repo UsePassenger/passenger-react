@@ -7,6 +7,14 @@ require('./stylesheets/main.css');
 
 var DateTimePicker = require('react-widgets/lib/DateTimePicker');
 var ComboBox = require('react-widgets/lib/ComboBox');
+var Router = require('react-router');
+
+var DefaultRoute = Router.DefaultRoute;
+var Link = Router.Link;
+var Route = Router.Route;
+var RouteHandler = Router.RouteHandler;
+
+var Navigation = require('react-router').Navigation;
 
 // http://localhost:8000/api/v1/mnr/search?departure=1&destination=4&daystamp=20150904
 // var baseUrl = "http://localhost:3001";
@@ -15,13 +23,13 @@ var baseUrl = "http://localhost:5050";
 var StationReference = require('./StationReference');
 var stationDictionary = StationReference.stationDictionary;
 var stationArray = StationReference.stationArray;
+var cache = {};
 
-export default class App extends Component {
-  render() {
-    return (
-      <h1>Hello, world!</h1>
-    );
-  }
+function dateFromDayStamp(daystamp) {
+  var year = daystamp.substring(0,4);
+  var month = daystamp.substring(4,6);
+  var day = daystamp.substring(6,8);
+  return new Date(month + "/" + day + "/" + year);
 }
 
 // http://stackoverflow.com/a/3067896/1185578
@@ -49,7 +57,67 @@ function filterStation(station, value) {
   return stationName.indexOf(search) >= 0;
 }
 
+export var MainApp = React.createClass({
+  render: function() {
+    return (
+      <div className="andrew">
+        <RouteHandler  {...this.props}/>
+      </div>
+    );
+  }
+});
+
 export var PassengerContent = React.createClass({
+  mixins: [ Navigation ],
+  componentWillReceiveProps (nextProps) {
+    var oldQuery = this.props.query;
+    var newQuery = nextProps.query;
+    console.log(newQuery);
+
+    // var queryString = "?departure=" + newQuery.departure
+    //   + "&destination=" + newQuery.destination;
+
+    // if (newQuery.daystamp) {
+    //   queryString += "&daystamp=" + newQuery.daystamp;
+    // }
+
+    // var newParams = {
+    //   departure: this.props.query.departure || "1",
+    //   destination: this.props.query.destination || "4",
+    //   date: this.props.query.daystamp ? dateFromDayStamp(this.props.query.daystamp) : new Date(),
+    //   data: cache[queryString] || []
+    // };
+
+    // var newState = {
+    //   departure: newParams.departure,
+    //   destination: newParams.destination,
+    //   daystamp: getDayStamp(newParams.date),
+    //   data: newParams.data
+    // };
+
+    // this.setState(newState);
+
+    // this.loadRouteEventPairsFromServerWithState(newParams);
+
+    // var queryString = "?departure=" + newQuery.departure
+    //   + "&destination=" + newQuery.destination;
+    // var newState = {};
+    // newState.departure = newQuery.departure;
+    // newState.destination = newQuery.destination;
+
+    // if (newQuery.daystamp) {
+    //   queryString += "&daystamp=" + newQuery.daystamp;
+    //   newState.daystamp = newQuery.daystamp;
+    // }
+
+    // if (cache[queryString]) {
+    //   newState.data = cache[queryString];
+    //   this.setState(newState);
+    //   this.forceUpdate();
+    // } else {
+    //   this.loadRouteEventPairsFromServer();
+    // }
+  },
   loadRouteEventPairsFromServer: function(field, val) {
     var queryParams = {
       departure: this.state.departure,
@@ -63,10 +131,12 @@ export var PassengerContent = React.createClass({
       queryParams[field] = val;
     }
 
+    var queryString = "departure=" + queryParams.departure
+        + "&destination=" + queryParams.destination;
+
     superagent
       .get(baseUrl + '/api/v1/mnr/search'
-        + "?departure=" + queryParams.departure
-        + "&destination=" + queryParams.destination
+        + "?" + queryString 
         + "&daystamp=" + getDayStamp(queryParams.date))
       .end(function(err, res) {
         if (err) {
@@ -83,22 +153,32 @@ export var PassengerContent = React.createClass({
             departure.date = new Date(departure.date);
             destination.date = new Date(destination.date);
             return {
-              departure: departure,
-              destination: destination,
+              departure, destination
             };
           });
 
           newState.data = routeEventPairs;
 
+          // Warning! Be careful setting state in deferred code.
+          // Check the community for "react-async", or "ismounted".
+          // Basically, we want to make sure that this component is
+          // mounted before setting state. component.isMounted
           this.setState(newState);
+
+          var url = '/mnr/timetable?' + queryString;
+          if (getDayStamp(new Date()) !== getDayStamp(queryParams.date)) {
+            url += "&daystamp=" + getDayStamp(queryParams.date)
+          }
+          cache[url] = data;
+          this.transitionTo(url);
         }
       }.bind(this));
   },
   getInitialState: function() {
     return {
-      departure: "1",
-      destination: "4",
-      date: new Date(),
+      departure: this.props.query.departure || "1",
+      destination: this.props.query.destination || "4",
+      date: this.props.query.daystamp ? dateFromDayStamp(this.props.query.daystamp) : new Date(),
       data: []
     };
   },
@@ -106,7 +186,6 @@ export var PassengerContent = React.createClass({
     this.loadRouteEventPairsFromServer();
   },
   onChange: function (field, newValue) {
-    console.log(arguments);
     this.loadRouteEventPairsFromServer(field, newValue);
   },
   render: function() {
