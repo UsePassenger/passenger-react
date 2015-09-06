@@ -25,6 +25,11 @@ var stationDictionary = StationReference.stationDictionary;
 var stationArray = StationReference.stationArray;
 var cache = {};
 
+// http://stackoverflow.com/a/25047903/1185578
+function isValidDate (date) {
+  return ( (new Date(date) !== "Invalid Date" && !isNaN(new Date(date)) ));
+}
+
 function dateFromDayStamp(daystamp) {
   var year = daystamp.substring(0,4);
   var month = daystamp.substring(4,6);
@@ -69,10 +74,14 @@ export var MainApp = React.createClass({
 
 export var PassengerContent = React.createClass({
   mixins: [ Navigation ],
+  shouldComponentUpdate (nextProps, nextState) {
+    console.log("shouldComponentUpdate", nextProps, nextState);
+    return true;
+  },
   componentWillReceiveProps (nextProps) {
     var oldQuery = this.props.query;
     var newQuery = nextProps.query;
-    console.log(newQuery);
+    console.log("componentWillReceiveProps", newQuery);
 
     // var queryString = "?departure=" + newQuery.departure
     //   + "&destination=" + newQuery.destination;
@@ -145,7 +154,6 @@ export var PassengerContent = React.createClass({
           console.log(res);
           
           var newState = {};
-          newState[field] = val;
 
           var data = res.body.result;
 
@@ -185,8 +193,23 @@ export var PassengerContent = React.createClass({
   componentDidMount: function() {
     this.loadRouteEventPairsFromServer();
   },
+  validateProps: function (field, newValue) {
+    if (field == "date") {
+      return isValidDate(newValue);
+    } else if (field == "departure" || field == "destination") {
+      return !!(newValue in stationDictionary);
+    }
+    return false;
+  },
   onChange: function (field, newValue) {
-    this.loadRouteEventPairsFromServer(field, newValue);
+    console.log("onChange", field, newValue);
+    var newState = {};
+    newState[field] = newValue;
+    this.setState(newState);
+
+    if (this.validateProps(field, newValue)) {
+      this.loadRouteEventPairsFromServer(field, newValue);
+    }
   },
   render: function() {
     var routeEventPairs = this.state.data;
