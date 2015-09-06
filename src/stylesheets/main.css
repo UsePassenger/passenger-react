@@ -10,10 +10,10 @@
 }
 
 .passengerFilter > div {
-  width: 50%;
+  width: 33%;
   padding: 10px;
 }
 
 .passengerFilter > div:first-child {
-  margin-right: 20px;
+  /*margin-right: 20px;*/
 }

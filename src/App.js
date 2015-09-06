@@ -1,4 +1,21 @@
 import React, { Component } from 'react';
+import { HotKeys, HotKeyMapMixin } from 'react-hotkeys';
+
+
+
+// Simple "name:key sequence/s" to create a hotkey map
+const keyMap = {
+  'simpleTest': 'escape',
+  'filterTest': 'b'
+};
+
+const handlers = {
+  'simpleTest': hotKeyHandler
+};
+
+function hotKeyHandler () {
+  console.log("right on!");
+}
 
 import superagent from 'superagent';
 
@@ -77,7 +94,7 @@ export var MainApp = React.createClass({
 });
 
 export var PassengerContent = React.createClass({
-  mixins: [ Navigation ],
+  mixins: [ Navigation, HotKeyMapMixin(keyMap) ],
   shouldComponentUpdate (nextProps, nextState) {
     return true;
   },
@@ -197,12 +214,14 @@ export var PassengerContent = React.createClass({
     var routeEventPairs = this.state.data;
 
     return (
-      <div className="passengerContent">
-        <h1>Filter</h1>
-        <PassengerFilter data={this.state} onChange={this.onChange} />
-        <h1>Time Table</h1>
-        <PassengerRouteEventPairsList data={routeEventPairs} />
-      </div>
+      <HotKeys handlers={handlers}>
+        <div className="passengerContent">
+          <h1>Filter</h1>
+          <PassengerFilter data={this.state} onChange={this.onChange} />
+          <h1>Time Table</h1>
+          <PassengerRouteEventPairsList data={routeEventPairs} />
+        </div>
+      </HotKeys>
     );
   }
 });
@@ -231,11 +250,8 @@ var RouteEventPair = React.createClass({
   render: function() {
     return (
       <tr className="routeEventPair">
-        <td className="routeEventPairDepartureTime">
-          Departure: {stationDictionary[this.props.departure.stop_id].stop_name}, {this.props.departure.departure_time}
-        </td>
-        <td className="routeEventPairDestinationTime">
-          Destination: {stationDictionary[this.props.destination.stop_id].stop_name}, {this.props.destination.departure_time}
+        <td className="routeEventPairTime">
+          {this.props.departure.departure_time} - {this.props.destination.departure_time}
         </td>
       </tr>
     );
@@ -243,37 +259,40 @@ var RouteEventPair = React.createClass({
 });
 
 var PassengerFilter = React.createClass({
+
+  
   render: function() {
+
+    const filterHandlers = {
+      'filterTest': this.filterHandler
+    };
+
     return (
       <div className="passengerFilter">
-        <div className="passengerFilter-left">
-          <div className="passengerFilterDepartureStation">
-            <label>Departure</label>
-            <ComboBox 
-              data={stationArray}
-              value={this.props.data.departure} 
-              valueField='stop_id' textField='stop_name'
-              filter={filterStation}
-              onChange={station => this.props.onChange('departure', station.stop_id)} />
-          </div>
-          <div className="passengerFilterDestinationStation">
-            <label>Destination</label>
-            <ComboBox 
-              data={stationArray}
-              value={this.props.data.destination}
-              valueField='stop_id' textField='stop_name'
-              filter={filterStation}
-              onChange={station => this.props.onChange('destination', station.stop_id)} />
-          </div>
+        <div className="passengerFilterDepartureStation">
+          <label>Departure</label>
+          <ComboBox 
+            data={stationArray}
+            value={this.props.data.departure} 
+            valueField='stop_id' textField='stop_name'
+            filter={filterStation}
+            onChange={station => this.props.onChange('departure', station.stop_id)} />
         </div>
-        <div className="passengerFilter-right">
-          <div className="passengerFilterDepartureDate">
-            <label>Date</label>
-            <DateTimePicker 
-              time={false}
-              value={this.props.data.date}
-              onChange={date => this.props.onChange('date', date)} />
-          </div>
+        <div className="passengerFilterDestinationStation">
+          <label>Destination</label>
+          <ComboBox 
+            data={stationArray}
+            value={this.props.data.destination}
+            valueField='stop_id' textField='stop_name'
+            filter={filterStation}
+            onChange={station => this.props.onChange('destination', station.stop_id)} />
+        </div>
+        <div className="passengerFilterDepartureDate">
+          <label>Date</label>
+          <DateTimePicker 
+            time={false}
+            value={this.props.data.date}
+            onChange={date => this.props.onChange('date', date)} />
         </div>
       </div>
     );
