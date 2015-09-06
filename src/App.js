@@ -30,6 +30,10 @@ function isValidDate (date) {
   return ( (new Date(date) !== "Invalid Date" && !isNaN(new Date(date)) ));
 }
 
+function getCacheKey(departure, destination, daystamp) {
+  return departure + "-" + destination + "-" + daystamp;
+}
+
 function dateFromDayStamp(daystamp) {
   var year = daystamp.substring(0,4);
   var month = daystamp.substring(4,6);
@@ -75,112 +79,85 @@ export var MainApp = React.createClass({
 export var PassengerContent = React.createClass({
   mixins: [ Navigation ],
   shouldComponentUpdate (nextProps, nextState) {
-    console.log("shouldComponentUpdate", nextProps, nextState);
     return true;
   },
   componentWillReceiveProps (nextProps) {
     var oldQuery = this.props.query;
     var newQuery = nextProps.query;
-    console.log("componentWillReceiveProps", newQuery);
 
-    // var queryString = "?departure=" + newQuery.departure
-    //   + "&destination=" + newQuery.destination;
-
-    // if (newQuery.daystamp) {
-    //   queryString += "&daystamp=" + newQuery.daystamp;
-    // }
-
-    // var newParams = {
-    //   departure: this.props.query.departure || "1",
-    //   destination: this.props.query.destination || "4",
-    //   date: this.props.query.daystamp ? dateFromDayStamp(this.props.query.daystamp) : new Date(),
-    //   data: cache[queryString] || []
-    // };
-
-    // var newState = {
-    //   departure: newParams.departure,
-    //   destination: newParams.destination,
-    //   daystamp: getDayStamp(newParams.date),
-    //   data: newParams.data
-    // };
-
-    // this.setState(newState);
-
-    // this.loadRouteEventPairsFromServerWithState(newParams);
-
-    // var queryString = "?departure=" + newQuery.departure
-    //   + "&destination=" + newQuery.destination;
-    // var newState = {};
-    // newState.departure = newQuery.departure;
-    // newState.destination = newQuery.destination;
-
-    // if (newQuery.daystamp) {
-    //   queryString += "&daystamp=" + newQuery.daystamp;
-    //   newState.daystamp = newQuery.daystamp;
-    // }
-
-    // if (cache[queryString]) {
-    //   newState.data = cache[queryString];
-    //   this.setState(newState);
-    //   this.forceUpdate();
-    // } else {
-    //   this.loadRouteEventPairsFromServer();
-    // }
-  },
-  loadRouteEventPairsFromServer: function(field, val) {
-    var queryParams = {
-      departure: this.state.departure,
-      destination: this.state.destination,
-      date: this.state.date
+    var newParams = {
+      departure: newQuery.departure || "1",
+      destination: newQuery.destination || "4",
+      date: newQuery.daystamp ? dateFromDayStamp(newQuery.daystamp) : new Date()
     };
 
-    console.log(arguments);
-
-    if (field && val) {
-      queryParams[field] = val;
-    }
+    this.setState(newParams);
+    this.fetchRouteEventPairs(newParams);
+  },
+  fetchRouteEventPairs: function (newParams) {
+    var queryParams = newParams;
 
     var queryString = "departure=" + queryParams.departure
         + "&destination=" + queryParams.destination;
 
-    superagent
-      .get(baseUrl + '/api/v1/mnr/search'
-        + "?" + queryString 
-        + "&daystamp=" + getDayStamp(queryParams.date))
-      .end(function(err, res) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log(res);
-          
-          var newState = {};
+    if (cache[getCacheKey(queryParams.departure, queryParams.destination, queryParams.date)]) {
+      var newState = {};
+      var data = cache[getCacheKey(queryParams.departure, queryParams.destination, queryParams.date)];
+      newState.data = data;
+      this.setState(newState);
+    } else {
+      superagent
+        .get(baseUrl + '/api/v1/mnr/search'
+          + "?" + queryString 
+          + "&daystamp=" + getDayStamp(queryParams.date))
+        .end(function(err, res) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(res);
+            
+            var newState = {};
 
-          var data = res.body.result;
+            var data = res.body.result;
 
-          var routeEventPairs = data.map(({departure, destination}) => {
-            departure.date = new Date(departure.date);
-            destination.date = new Date(destination.date);
-            return {
-              departure, destination
-            };
-          });
+            var routeEventPairs = data.map(({departure, destination}) => {
+              departure.date = new Date(departure.date);
+              destination.date = new Date(destination.date);
+              return {
+                departure, destination
+              };
+            });
 
-          newState.data = routeEventPairs;
+            newState.data = routeEventPairs;
 
-          // Warning! Be careful setting state in deferred code.
-          // Check the community for "react-async", or "ismounted".
-          // Basically, we want to make sure that this component is
-          // mounted before setting state. component.isMounted
-          this.setState(newState);
+            // Warning! Be careful setting state in deferred code.
+            // Check the community for "react-async", or "ismounted".
+            // Basically, we want to make sure that this component is
+            // mounted before setting state. component.isMounted
+            this.setState(newState);
 
-          var url = '/mnr/timetable?' + queryString;
-          if (getDayStamp(new Date()) !== getDayStamp(queryParams.date)) {
-            url += "&daystamp=" + getDayStamp(queryParams.date)
+            cache[getCacheKey(queryParams.departure, queryParams.destination, queryParams.date)] = newState.data;
           }
-          cache[url] = data;
-          this.transitionTo(url);
-        }
-      }.bind(this));
+        }.bind(this));
+    }
+
+  },
+  transitionForNewParams: function(newParams) {
+    var queryParams = {
+      departure: newParams.departure || this.state.departure,
+      destination: newParams.destination || this.state.destination,
+      date: newParams.date || this.state.date
+    };
+
+    var queryString = "departure=" + queryParams.departure
+        + "&destination=" + queryParams.destination;
+    if (getDayStamp(new Date()) !== getDayStamp(queryParams.date)) {
+      queryString += "&daystamp=" + getDayStamp(queryParams.date)
+    }
+
+    var url = '/mnr/timetable?' + queryString;
+
+    this.transitionTo(url);
   },
   getInitialState: function() {
     return {
@@ -191,7 +168,13 @@ export var PassengerContent = React.createClass({
     };
   },
   componentDidMount: function() {
-    this.loadRouteEventPairsFromServer();
+    var queryParams = {
+      departure: this.state.departure,
+      destination: this.state.destination,
+      date: this.state.date
+    };
+    this.transitionForNewParams({});
+    this.fetchRouteEventPairs(queryParams);
   },
   validateProps: function (field, newValue) {
     if (field == "date") {
@@ -202,13 +185,12 @@ export var PassengerContent = React.createClass({
     return false;
   },
   onChange: function (field, newValue) {
-    console.log("onChange", field, newValue);
     var newState = {};
     newState[field] = newValue;
     this.setState(newState);
 
     if (this.validateProps(field, newValue)) {
-      this.loadRouteEventPairsFromServer(field, newValue);
+      this.transitionForNewParams(newState);
     }
   },
   render: function() {
