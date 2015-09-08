@@ -9,13 +9,7 @@ const keyMap = {
   'filterTest': 'b'
 };
 
-const handlers = {
-  'simpleTest': hotKeyHandler
-};
 
-function hotKeyHandler () {
-  console.log("right on!");
-}
 
 import superagent from 'superagent';
 
@@ -87,7 +81,7 @@ function filterStation(station, value) {
 export var MainApp = React.createClass({
   render: function() {
     return (
-      <RouteHandler  {...this.props}/>
+      <RouteHandler {...this.props}/>
     );
   }
 });
@@ -209,11 +203,19 @@ export var PassengerContent = React.createClass({
       this.transitionForNewParams(newState);
     }
   },
+  hotKeyHandler () {
+    console.log("right on!");
+    React.findDOMNode(this.refs.hotKeyTopLevel).focus();
+  },
   render: function() {
     var routeEventPairs = this.state.data;
 
+    const handlers = {
+      'simpleTest': this.hotKeyHandler
+    };
+
     return (
-      <HotKeys handlers={handlers}>
+      <HotKeys handlers={handlers} ref="hotKeyTopLevel">
         <div className="passengerContent">
           <div className="passengerHeader">
             <div className="passengerTitle">
@@ -233,15 +235,24 @@ export var PassengerContent = React.createClass({
 });
 
 var PassengerRouteEventPairsList = React.createClass({
+  handleClick () {
+    console.log(arguments);
+  },
   render: function() {
-    var routeEventPairNodes = this.props.data.map(function(routeEventPair, index) {
+    var routeEventPairRows = this.props.data.map(function(routeEventPair, index) {
       return (
         // `key` is a React-specific concept and is not mandatory for the
         // purpose of this tutorial. if you're curious, see more here:
         // http://facebook.github.io/react/docs/multiple-components.html#dynamic-children
-        <RouteEventPair departure={routeEventPair.departure} destination={routeEventPair.destination} key={index} />
+        <tr onClick={event => this.handleClick(event, index)} key={index} >
+          <td>
+            <div>
+              {routeEventPair.departure.departure_time} - {routeEventPair.destination.departure_time}
+            </div>
+          </td>
+        </tr>
       );
-    });
+    }.bind(this));
     return (
       <div className="tableContainer">
         <div>
@@ -249,27 +260,13 @@ var PassengerRouteEventPairsList = React.createClass({
         </div>
         <div className="routeEventPairTableContainer">
           <table className="routeEventPairTable">
-            {routeEventPairNodes}
+            {routeEventPairRows}
           </table>
         </div>
         <div>
           {"Tomorrow's Schedule"}
         </div>
       </div>
-    );
-  }
-});
-
-var RouteEventPair = React.createClass({
-  render: function() {
-    return (
-      <tr>
-        <td>
-          <div>
-            {this.props.departure.departure_time} - {this.props.destination.departure_time}
-          </div>
-        </td>
-      </tr>
     );
   }
 });
