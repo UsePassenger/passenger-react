@@ -24,7 +24,7 @@ require('./stylesheets/main.css');
 require('./stylesheets/flex.css');
 
 var DateTimePicker = require('react-widgets/lib/DateTimePicker');
-var ComboBox = require('react-widgets/lib/ComboBox');
+var ComboBox = require('react-widgets/lib/Combobox');
 var Router = require('react-router');
 
 var DefaultRoute = Router.DefaultRoute;
