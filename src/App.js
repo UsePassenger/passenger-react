@@ -21,6 +21,7 @@ import superagent from 'superagent';
 
 require('react-widgets/dist/css/react-widgets.css');
 require('./stylesheets/main.css');
+require('./stylesheets/flex.css');
 
 var DateTimePicker = require('react-widgets/lib/DateTimePicker');
 var ComboBox = require('react-widgets/lib/ComboBox');
@@ -35,7 +36,7 @@ var Navigation = require('react-router').Navigation;
 
 // http://localhost:8000/api/v1/mnr/search?departure=1&destination=4&daystamp=20150904
 // var baseUrl = "http://localhost:3001";
-var baseUrl = "http://localhost:5050";
+var baseUrl = "http://pssngr.co";
 
 var StationReference = require('./StationReference');
 var stationDictionary = StationReference.stationDictionary;
@@ -86,9 +87,7 @@ function filterStation(station, value) {
 export var MainApp = React.createClass({
   render: function() {
     return (
-      <div className="andrew">
-        <RouteHandler  {...this.props}/>
-      </div>
+      <RouteHandler  {...this.props}/>
     );
   }
 });
@@ -216,10 +215,17 @@ export var PassengerContent = React.createClass({
     return (
       <HotKeys handlers={handlers}>
         <div className="passengerContent">
-          <h1>Filter</h1>
-          <PassengerFilter data={this.state} onChange={this.onChange} />
-          <h1>Time Table</h1>
-          <PassengerRouteEventPairsList data={routeEventPairs} />
+          <div className="passengerHeader">
+            <div className="passengerTitle">
+              <h1>Passenger</h1>
+            </div>
+            <div className="passengerFilterContainer">
+              <PassengerFilter data={this.state} onChange={this.onChange} />
+            </div>
+          </div>
+          <div className="passengerTimetableContainer">
+            <PassengerRouteEventPairsList data={routeEventPairs} />
+          </div>
         </div>
       </HotKeys>
     );
@@ -233,14 +239,22 @@ var PassengerRouteEventPairsList = React.createClass({
         // `key` is a React-specific concept and is not mandatory for the
         // purpose of this tutorial. if you're curious, see more here:
         // http://facebook.github.io/react/docs/multiple-components.html#dynamic-children
-        <table style={{ width: "100%" }}>
-          <RouteEventPair departure={routeEventPair.departure} destination={routeEventPair.destination} key={index} />
-        </table>
+        <RouteEventPair departure={routeEventPair.departure} destination={routeEventPair.destination} key={index} />
       );
     });
     return (
-      <div className="routeEventPairsList">
-        {routeEventPairNodes}
+      <div className="tableContainer">
+        <div>
+          {"Yesterday's Schedule"}
+        </div>
+        <div className="routeEventPairTableContainer">
+          <table className="routeEventPairTable">
+            {routeEventPairNodes}
+          </table>
+        </div>
+        <div>
+          {"Tomorrow's Schedule"}
+        </div>
       </div>
     );
   }
@@ -249,9 +263,11 @@ var PassengerRouteEventPairsList = React.createClass({
 var RouteEventPair = React.createClass({
   render: function() {
     return (
-      <tr className="routeEventPair">
-        <td className="routeEventPairTime">
-          {this.props.departure.departure_time} - {this.props.destination.departure_time}
+      <tr>
+        <td>
+          <div>
+            {this.props.departure.departure_time} - {this.props.destination.departure_time}
+          </div>
         </td>
       </tr>
     );
@@ -268,31 +284,39 @@ var PassengerFilter = React.createClass({
     };
 
     return (
-      <div className="passengerFilter">
-        <div className="passengerFilterDepartureStation">
-          <label>Departure</label>
-          <ComboBox 
-            data={stationArray}
-            value={this.props.data.departure} 
-            valueField='stop_id' textField='stop_name'
-            filter={filterStation}
-            onChange={station => this.props.onChange('departure', station.stop_id)} />
+      <div className="Grid passengerFilter">
+        <div className="Grid-cell">
+          <div className="Grid passengerFilter-cell">
+            <div className="Grid-cell">
+              <label>From</label>
+              <ComboBox 
+                data={stationArray}
+                value={this.props.data.departure} 
+                valueField='stop_id' textField='stop_name'
+                filter={filterStation}
+                onChange={station => this.props.onChange('departure', station.stop_id)} />
+            </div>
+            <div className="Grid-cell">
+              <label>To</label>
+              <ComboBox 
+                data={stationArray}
+                value={this.props.data.destination}
+                valueField='stop_id' textField='stop_name'
+                filter={filterStation}
+                onChange={station => this.props.onChange('destination', station.stop_id)} />
+            </div>
+          </div>
         </div>
-        <div className="passengerFilterDestinationStation">
-          <label>Destination</label>
-          <ComboBox 
-            data={stationArray}
-            value={this.props.data.destination}
-            valueField='stop_id' textField='stop_name'
-            filter={filterStation}
-            onChange={station => this.props.onChange('destination', station.stop_id)} />
-        </div>
-        <div className="passengerFilterDepartureDate">
-          <label>Date</label>
-          <DateTimePicker 
-            time={false}
-            value={this.props.data.date}
-            onChange={date => this.props.onChange('date', date)} />
+        <div className="Grid-cell u-1of3">
+          <div className="Grid passengerFilter-cell">
+            <div className="Grid-cell">
+              <label>Date</label>
+              <DateTimePicker 
+                time={false}
+                value={this.props.data.date}
+                onChange={date => this.props.onChange('date', date)} />
+            </div>
+          </div>
         </div>
       </div>
     );

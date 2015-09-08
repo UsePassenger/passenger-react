@@ -1,19 +1,105 @@
+body {
+  margin: 0;
+}
+
+/* Fix ReactWidget Bug where bottom border doesn't show */
+.rw-widget {
+  padding-bottom: 1px;
+  margin-bottom: -1px;
+}
+
 .passengerContent {
-  max-width: 50%;
+  max-width: 50em;
   margin: 0 auto;
 }
 
-.passengerFilter {
+.passengerHeader {
+  position: fixed;
+  z-index: 1;
+
+  /* Required to get correct width for position:fixed */
+  max-width: inherit;
+  width: 100%;
+}
+
+.passengerTitle {
+  background-color: white;
+  height: 66px;
+
   display: -ms-flex;
   display: -webkit-flex;
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.passengerFilter {
+  background-color: #08B63D;
 }
 
 .passengerFilter > div {
-  width: 33%;
+  background-color: white;
+  border-radius: 10px;
+  margin: 10px 10px 10px 0;
+}
+
+.passengerFilter-cell > div {
+  padding: 10px 10px 10px 0;
+}
+
+.passengerFilter-cell > div:first-child {
   padding: 10px;
 }
 
 .passengerFilter > div:first-child {
-  /*margin-right: 20px;*/
+  margin: 10px;
+}
+
+.passengerFilter > div:nth-child(2) {
+}
+
+.passengerFilterStationContainer {
+}
+
+.passengerFilterStationContainer > div {
+}
+
+.passengerTimetableContainer {
+  position: relative;
+  padding-top: 166px;
+}
+
+.routeEventPairTable > tr {
+  height: 44px;
+}
+
+.routeEventPairTableContainer {
+  padding-left: 22px;
+}
+
+.routeEventPairTable {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.routeEventPairTable > tr > td {
+  padding: 10px 0; /* 10px top & bottom padding, 0px left & right */
+}
+
+.routeEventPairTable > tr {
+  border-top: 1px #606162 solid; /* top border only */
+}
+
+.routeEventPairTable > tr:first-child {
+  border-top: none;
+}
+
+.tableContainer > div:first-child {
+  text-align: center;
+  border-bottom: 1px #606162 solid;
+}
+
+.tableContainer > div:last-child {
+  text-align: center;
+  border-top: 1px #606162 solid;
 }
