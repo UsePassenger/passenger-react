@@ -26,6 +26,8 @@ var Link = Router.Link;
 var Route = Router.Route;
 var RouteHandler = Router.RouteHandler;
 
+// console.log('watch me!!!');
+
 var Navigation = require('react-router').Navigation;
 
 // http://localhost:8000/api/v1/mnr/search?departure=1&destination=4&daystamp=20150904
@@ -221,11 +223,11 @@ export var PassengerContent = React.createClass({
             <div className="passengerTitle">
               <h1>Passenger</h1>
             </div>
+          </div>
+          <div className="passengerTimetableContainer">
             <div className="passengerFilterContainer">
               <PassengerFilter data={this.state} onChange={this.onChange} />
             </div>
-          </div>
-          <div className="passengerTimetableContainer">
             <PassengerRouteEventPairsList data={routeEventPairs} />
           </div>
         </div>
@@ -282,20 +284,20 @@ var PassengerFilter = React.createClass({
 
     return (
       <div className="Grid passengerFilter">
-        <div className="Grid-cell">
-          <div className="Grid passengerFilter-cell">
-            <div className="Grid-cell">
-              <label>From</label>
-              <ComboBox 
+        <div className="Grid Grid-cell">
+          <div className="Grid-cell passengerFilter-cell">
+            <div className="Grid">
+              <label className="Grid-cell ps-cellLabel">From</label>
+              <ComboBox className="Grid-cell"
                 data={stationArray}
                 value={this.props.data.departure} 
                 valueField='stop_id' textField='stop_name'
                 filter={filterStation}
                 onChange={station => this.props.onChange('departure', station.stop_id)} />
             </div>
-            <div className="Grid-cell">
-              <label>To</label>
-              <ComboBox 
+            <div className="Grid">
+              <label className="Grid-cell ps-cellLabel">To</label>
+              <ComboBox className="Grid-cell"
                 data={stationArray}
                 value={this.props.data.destination}
                 valueField='stop_id' textField='stop_name'
@@ -303,15 +305,23 @@ var PassengerFilter = React.createClass({
                 onChange={station => this.props.onChange('destination', station.stop_id)} />
             </div>
           </div>
+          <div className="Grid-cell ps-centerText ps-filterCell-swap">
+            Swap
+          </div>
         </div>
         <div className="Grid-cell u-1of3">
           <div className="Grid passengerFilter-cell">
-            <div className="Grid-cell">
-              <label>Date</label>
-              <DateTimePicker 
+            <div className="Grid">
+              <label className="Grid-cell ps-cellLabel">Date</label>
+              <DateTimePicker className="Grid-cell"
                 time={false}
                 value={this.props.data.date}
                 onChange={date => this.props.onChange('date', date)} />
+            </div>
+            <div className="Grid">
+              <div className="Grid-cell ps-centerText">Yesterday</div>
+              <div className="Grid-cell ps-centerText">Today</div>
+              <div className="Grid-cell ps-centerText">Tomorrow</div>
             </div>
           </div>
         </div>

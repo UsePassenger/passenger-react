@@ -31,4 +31,8 @@ With this setup, you never have to refresh or restart the server after making ch
 
 NOTE: When changing the webpack.config, you may have to restart the webpack dev server.
 
-NOTE: When there are erros, it is probably best to refresh.
+NOTE: When there are errors, it is probably best to refresh.
+
+# To Open
+
+http://pssngr.co/mnr/timetable?departure=1&destination=4
