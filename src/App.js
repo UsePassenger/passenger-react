@@ -31,8 +31,8 @@ var RouteHandler = Router.RouteHandler;
 var Navigation = require('react-router').Navigation;
 
 // http://localhost:8000/api/v1/mnr/search?departure=1&destination=4&daystamp=20150904
-// var baseUrl = "http://localhost:3001";
-var baseUrl = "http://pssngr.co";
+var baseUrl = "http://0.0.0.0:3001";
+// var baseUrl = "http://pssngr.co";
 
 var StationReference = require('./StationReference');
 var stationDictionary = StationReference.stationDictionary;
@@ -128,9 +128,9 @@ export var PassengerContent = React.createClass({
           + "&daystamp=" + getDayStamp(queryParams.date))
         .end(function(err, res) {
           if (err) {
-            console.log(err);
+            // console.log(err);
           } else {
-            console.log(res);
+            // console.log(res);
             
             var newState = {};
 
@@ -171,7 +171,7 @@ export var PassengerContent = React.createClass({
       queryString += "&daystamp=" + getDayStamp(queryParams.date)
     }
 
-    var url = '/mnr/timetable?' + queryString;
+    var url = '/timetable/mnr?' + queryString;
 
     this.transitionTo(url);
   },
@@ -305,7 +305,6 @@ var PassengerRouteEventPairsList = React.createClass({
   },
   render: function() {
     var d = this.props.data.date;
-    console.log(d);
     var routeEventPairs = this.props.data.data;
     var routeEventPairRows = routeEventPairs.map(function(routeEventPair, index) {
       var depT = routeEventPair.departure.departure_time;

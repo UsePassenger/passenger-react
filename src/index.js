@@ -14,7 +14,7 @@ var RouteHandler = Router.RouteHandler;
 // React.render(<PassengerContent />, document.getElementById('root'));
 
 var routes = (
-  <Route name="app" path="/mnr/timetable" handler={MainApp}>
+  <Route name="app" path="/timetable/mnr" handler={MainApp}>
     <DefaultRoute handler={PassengerContent}/>
   </Route>
 );
