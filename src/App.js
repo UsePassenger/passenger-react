@@ -48,6 +48,10 @@ function getCacheKey(departure, destination, daystamp) {
   return departure + "-" + destination + "-" + daystamp;
 }
 
+function dateFromTimeAndDay(hr, min, sec, day) {
+  // TODO
+}
+
 function dateFromDayStamp(daystamp) {
   var year = daystamp.substring(0,4);
   var month = daystamp.substring(4,6);
@@ -220,15 +224,41 @@ export var PassengerContent = React.createClass({
       <HotKeys handlers={handlers} ref="hotKeyTopLevel">
         <div className="passengerContent">
           <div className="passengerHeader">
-            <div className="passengerTitle">
-              <h1>Passenger</h1>
+            <div className="Grid passengerHeaderWrapper">
+              <div className="Grid-cell">
+                <div className="Grid">
+                  <div className="Grid-cell cell-logo">
+                    <img className="passenger-logo"></img>
+                  </div>
+                  <div className="Grid-cell cell-title">
+                    Passenger MNR
+                  </div>
+                </div>
+              </div>
+
+              <div className="Grid-cell"></div>
+
+              <div className="Grid Grid-cell u-1of3">
+                <div className="Grid-cell ps-centerText">
+                  <span>Home</span>
+                </div>
+                <div className="Grid-cell ps-centerText">
+                  <span>Chat</span>
+                </div>
+                <div className="Grid-cell ps-centerText">
+                  <span>Maps</span>
+                </div>
+                <div className="Grid-cell ps-centerText">
+                  <span>About</span>
+                </div>
+              </div>
             </div>
           </div>
           <div className="passengerTimetableContainer">
             <div className="passengerFilterContainer">
               <PassengerFilter data={this.state} onChange={this.onChange} />
             </div>
-            <PassengerRouteEventPairsList data={routeEventPairs} />
+            <PassengerRouteEventPairsList data={this.state}/>
           </div>
         </div>
       </HotKeys>
@@ -236,12 +266,54 @@ export var PassengerContent = React.createClass({
   }
 });
 
+function pad(num, size) {
+  var s = num+"";
+  while (s.length < size) s = "0" + s;
+  return s;
+}
+
 var PassengerRouteEventPairsList = React.createClass({
   handleClick () {
     console.log(arguments);
   },
+  timeUntil: function(t, td, now) {
+    // TODO: Need date of query and the current time to be accurate.
+  },
+  timeDiff: function(t1, t2) {
+    var hr1 = parseInt(t1.slice(0,2));
+    var m1 = parseInt(t1.slice(3,5));
+    var hr2 = parseInt(t2.slice(0,2));
+    var m2 = parseInt(t2.slice(3,5));
+
+    var totalm1 = hr1 * 60 + m1;
+    var totalm2 = hr2 * 60 + m2;
+    return totalm1 - totalm2;
+  },
+  formatTime: function(t) {
+    // DEBT
+    var hr = parseInt(t.slice(0,2));
+    var m = parseInt(t.slice(3,5));
+    var ampm = "AM";
+    if (hr > 12) {
+      hr = hr % 12;
+      ampm = "PM";
+    }
+    if (hr === 0) {
+      hr = 12;
+    }
+    return hr.toString() + ":" + pad(m.toString(), 2) + ampm;
+  },
   render: function() {
-    var routeEventPairRows = this.props.data.map(function(routeEventPair, index) {
+    var d = this.props.data.date;
+    console.log(d);
+    var routeEventPairs = this.props.data.data;
+    var routeEventPairRows = routeEventPairs.map(function(routeEventPair, index) {
+      var depT = routeEventPair.departure.departure_time;
+      var arrT = routeEventPair.destination.departure_time;
+      var depStr = this.formatTime(depT);
+      var arrStr = this.formatTime(arrT);
+      var travelStr = this.timeDiff(arrT, depT).toString() + "m";
+
       return (
         // `key` is a React-specific concept and is not mandatory for the
         // purpose of this tutorial. if you're curious, see more here:
@@ -249,7 +321,10 @@ var PassengerRouteEventPairsList = React.createClass({
         <tr onClick={event => this.handleClick(event, index)} key={index} >
           <td>
             <div>
-              {routeEventPair.departure.departure_time} - {routeEventPair.destination.departure_time}
+              <span className="trainTime">{depStr} - {arrStr}</span> <span className="travelTime">{travelStr}</span>
+            </div>
+            <div>
+              <span className="untilTime">{"Leaves in 20m 20s"}</span>
             </div>
           </td>
         </tr>
@@ -257,16 +332,10 @@ var PassengerRouteEventPairsList = React.createClass({
     }.bind(this));
     return (
       <div className="tableContainer">
-        <div>
-          {"Yesterday's Schedule"}
-        </div>
         <div className="routeEventPairTableContainer">
           <table className="routeEventPairTable">
             {routeEventPairRows}
           </table>
-        </div>
-        <div>
-          {"Tomorrow's Schedule"}
         </div>
       </div>
     );
@@ -275,7 +344,6 @@ var PassengerRouteEventPairsList = React.createClass({
 
 var PassengerFilter = React.createClass({
 
-  
   render: function() {
 
     const filterHandlers = {
@@ -297,7 +365,7 @@ var PassengerFilter = React.createClass({
             </div>
             <div className="Grid">
               <label className="Grid-cell ps-cellLabel">To</label>
-              <ComboBox className="Grid-cell"
+              <ComboBox className="Grid-cell ps-station"
                 data={stationArray}
                 value={this.props.data.destination}
                 valueField='stop_id' textField='stop_name'
@@ -306,7 +374,7 @@ var PassengerFilter = React.createClass({
             </div>
           </div>
           <div className="Grid-cell ps-centerText ps-filterCell-swap">
-            Swap
+            &#8693;
           </div>
         </div>
         <div className="Grid-cell u-1of3">
@@ -319,9 +387,9 @@ var PassengerFilter = React.createClass({
                 onChange={date => this.props.onChange('date', date)} />
             </div>
             <div className="Grid">
-              <div className="Grid-cell ps-centerText">Yesterday</div>
+              <div className="Grid-cell ps-centerText">&larr;</div>
               <div className="Grid-cell ps-centerText">Today</div>
-              <div className="Grid-cell ps-centerText">Tomorrow</div>
+              <div className="Grid-cell ps-centerText">&rarr;</div>
             </div>
           </div>
         </div>

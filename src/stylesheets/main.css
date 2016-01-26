@@ -1,131 +1,367 @@
+html {
+  background-color: #F3F3F3;
+}
+
 body {
   margin: 0;
 }
 
-/* Fix ReactWidget Bug where bottom border doesn't show */
-.rw-widget {
-  padding-bottom: 1px;
-  margin-bottom: -1px;
+@media (max-width: 750px) {
+  /* Fix ReactWidget Bug where bottom border doesn't show */
+  .rw-widget {
+    padding-bottom: 1px;
+    margin-bottom: -1px;
+  }
+
+  .passengerContent {
+    /*max-width: 50em;*/
+    /*margin: 0 auto;*/
+  }
+
+  .trainTime {
+
+  }
+
+  .untilTime {
+    border: black 1px solid;
+    border-radius: 3px;
+  }
+
+  .travelTime {
+    color: #909298;
+  }
+
+  .passengerFilterContainer {
+    border-bottom: #808080 1px solid;
+  }
+
+  .passenger-logo {
+    width: 24pt;
+    height: 24pt;
+    border-radius: .1em;
+    position: relative;
+    bottom: -7%;
+    content: url("http://usepassenger.com/images/Icon-60@3x.png");
+  }
+
+  .passengerHeader {
+    /*position: fixed;*/
+    z-index: 1;
+
+    /* Required to get correct width for position:fixed */
+    max-width: inherit;
+    width: 100%;
+    background-color: blue;
+    border-bottom: #808080 1px solid;
+  }
+
+  .passengerHeaderWrapper {
+    width: 750px !important;
+    margin: 0 auto !important;
+  }
+
+  .ps-filterCell-swap {
+    -webkit-box-flex: 0 0 60px !important;
+    -webkit-flex: 0 0 60px !important;
+    -ms-flex: 0 0 60px !important;
+    flex: 0 0 60px !important;
+  }
+
+  .cell-logo {
+    -webkit-box-flex: 0 0 44px !important;
+    -webkit-flex: 0 0 44px !important;
+    -ms-flex: 0 0 44px !important;
+    flex: 0 0 44px !important;
+  }
+
+  .cell-title {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: left;
+    padding-left: 10px;
+  }
+
+  .ps-centerText {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .ps-cellLabel {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: right;
+    padding-right: 10px;
+
+    -webkit-box-flex: 0 0 60px !important;
+    -webkit-flex: 0 0 60px !important;
+    -ms-flex: 0 0 60px !important;
+    flex: 0 0 60px !important;
+  }
+
+  .passengerTitle {
+    background-color: white;
+    height: 66px;
+
+    display: -ms-flex;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .passengerFilter {
+    background-color: #08B63D;
+  }
+
+  .passengerFilter > div {
+    background-color: white;
+    border-radius: 10px;
+    margin: 10px 10px 10px 0;
+  }
+
+  .passengerFilter-cell > div {
+    padding: 10px;
+    width: 100%;
+  }
+
+  .passengerFilter > div:first-child {
+    margin: 10px;
+  }
+
+  .passengerFilter > div:nth-child(2) {
+  }
+
+  .passengerFilterStationContainer {
+  }
+
+  .passengerFilterStationContainer > div {
+  }
+
+  .passengerTimetableContainer {
+    position: relative;
+    /*padding-top: 166px;*/
+    width: 750px !important;
+    margin: 0 auto;
+    background-color: white;
+  }
+
+  .routeEventPairTable > tr {
+    height: 44px;
+  }
+
+  .routeEventPairTableContainer {
+    padding-left: 22px;
+  }
+
+  .routeEventPairTable {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .routeEventPairTable > tr > td {
+    padding: 10px 0; /* 10px top & bottom padding, 0px left & right */
+  }
+
+  .routeEventPairTable > tr {
+    border-top: 1px #606162 solid; /* top border only */
+  }
+
+  .routeEventPairTable > tr:first-child {
+    border-top: none;
+  }
+
+  .tableContainer > div:first-child {
+    text-align: center;
+    border-bottom: 1px #606162 solid;
+  }
+
+  .tableContainer > div:last-child {
+    text-align: center;
+    border-top: 1px #606162 solid;
+  }
 }
 
-.passengerContent {
-  /*max-width: 50em;*/
-  /*margin: 0 auto;*/
+@media (min-width: 750px) {
+  /* Fix ReactWidget Bug where bottom border doesn't show */
+  .rw-widget {
+    padding-bottom: 1px;
+    margin-bottom: -1px;
+  }
+
+  .passengerContent {
+    /*max-width: 50em;*/
+    /*margin: 0 auto;*/
+  }
+
+  .trainTime {
+
+  }
+
+  .untilTime {
+    border: black 1px solid;
+    border-radius: 3px;
+  }
+
+  .travelTime {
+    color: #909298;
+  }
+
+  .passengerFilterContainer {
+    border-bottom: #808080 1px solid;
+  }
+
+  .passenger-logo {
+    width: 24pt;
+    height: 24pt;
+    border-radius: .1em;
+    position: relative;
+    bottom: -7%;
+    content: url("http://usepassenger.com/images/Icon-60@3x.png");
+  }
+
+  .passengerHeader {
+    /*position: fixed;*/
+    z-index: 1;
+
+    /* Required to get correct width for position:fixed */
+    max-width: inherit;
+    width: 100%;
+    background-color: white;
+    border-bottom: #808080 1px solid;
+  }
+
+  .passengerHeaderWrapper {
+    width: 750px !important;
+    margin: 0 auto !important;
+  }
+
+  .ps-filterCell-swap {
+    -webkit-box-flex: 0 0 60px !important;
+    -webkit-flex: 0 0 60px !important;
+    -ms-flex: 0 0 60px !important;
+    flex: 0 0 60px !important;
+  }
+
+  .cell-logo {
+    -webkit-box-flex: 0 0 44px !important;
+    -webkit-flex: 0 0 44px !important;
+    -ms-flex: 0 0 44px !important;
+    flex: 0 0 44px !important;
+  }
+
+  .cell-title {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: left;
+    padding-left: 10px;
+  }
+
+  .ps-centerText {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .ps-cellLabel {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: right;
+    padding-right: 10px;
+
+    -webkit-box-flex: 0 0 60px !important;
+    -webkit-flex: 0 0 60px !important;
+    -ms-flex: 0 0 60px !important;
+    flex: 0 0 60px !important;
+  }
+
+  .passengerTitle {
+    background-color: white;
+    height: 66px;
+
+    display: -ms-flex;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .passengerFilter {
+    background-color: #08B63D;
+  }
+
+  .passengerFilter > div {
+    background-color: white;
+    border-radius: 10px;
+    margin: 10px 10px 10px 0;
+  }
+
+  .passengerFilter-cell > div {
+    padding: 10px;
+    width: 100%;
+  }
+
+  .passengerFilter > div:first-child {
+    margin: 10px;
+  }
+
+  .passengerFilter > div:nth-child(2) {
+  }
+
+  .passengerFilterStationContainer {
+  }
+
+  .passengerFilterStationContainer > div {
+  }
+
+  .passengerTimetableContainer {
+    position: relative;
+    /*padding-top: 166px;*/
+    width: 750px !important;
+    margin: 0 auto;
+    background-color: white;
+  }
+
+  .routeEventPairTable > tr {
+    height: 44px;
+  }
+
+  .routeEventPairTableContainer {
+    padding-left: 22px;
+  }
+
+  .routeEventPairTable {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .routeEventPairTable > tr > td {
+    padding: 10px 0; /* 10px top & bottom padding, 0px left & right */
+  }
+
+  .routeEventPairTable > tr {
+    border-top: 1px #606162 solid; /* top border only */
+  }
+
+  .routeEventPairTable > tr:first-child {
+    border-top: none;
+  }
+
+  .tableContainer > div:first-child {
+    text-align: center;
+    border-bottom: 1px #606162 solid;
+  }
+
+  .tableContainer > div:last-child {
+    text-align: center;
+    border-top: 1px #606162 solid;
+  }
+
 }
 
-.passengerHeader {
-  /*position: fixed;*/
-  z-index: 1;
-
-  /* Required to get correct width for position:fixed */
-  max-width: inherit;
-  width: 100%;
-}
-
-.ps-filterCell-swap {
-  -webkit-box-flex: 0 0 60px !important;
-  -webkit-flex: 0 0 60px !important;
-  -ms-flex: 0 0 60px !important;
-  flex: 0 0 60px !important;
-}
-
-.ps-centerText {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-}
-
-.ps-cellLabel {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  text-align: right;
-  padding-right: 10px;
-
-  -webkit-box-flex: 0 0 60px !important;
-  -webkit-flex: 0 0 60px !important;
-  -ms-flex: 0 0 60px !important;
-  flex: 0 0 60px !important;
-}
-
-.passengerTitle {
-  background-color: white;
-  height: 66px;
-
-  display: -ms-flex;
-  display: -webkit-flex;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.passengerFilter {
-  background-color: #08B63D;
-}
-
-.passengerFilter > div {
-  background-color: white;
-  border-radius: 10px;
-  margin: 10px 10px 10px 0;
-}
-
-.passengerFilter-cell > div {
-  padding: 10px;
-  width: 100%;
-}
-
-.passengerFilter > div:first-child {
-  margin: 10px;
-}
-
-.passengerFilter > div:nth-child(2) {
-}
-
-.passengerFilterStationContainer {
-}
-
-.passengerFilterStationContainer > div {
-}
-
-.passengerTimetableContainer {
-  position: relative;
-  /*padding-top: 166px;*/
-  max-width: 750px;
-  margin: 0 auto;
-}
-
-.routeEventPairTable > tr {
-  height: 44px;
-}
-
-.routeEventPairTableContainer {
-  padding-left: 22px;
-}
-
-.routeEventPairTable {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-.routeEventPairTable > tr > td {
-  padding: 10px 0; /* 10px top & bottom padding, 0px left & right */
-}
-
-.routeEventPairTable > tr {
-  border-top: 1px #606162 solid; /* top border only */
-}
-
-.routeEventPairTable > tr:first-child {
-  border-top: none;
-}
-
-.tableContainer > div:first-child {
-  text-align: center;
-  border-bottom: 1px #606162 solid;
-}
-
-.tableContainer > div:last-child {
-  text-align: center;
-  border-top: 1px #606162 solid;
-}
