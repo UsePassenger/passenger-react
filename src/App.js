@@ -326,9 +326,6 @@ var PassengerRouteEventPairsList = React.createClass({
             <div>
               <span className="trainTime">{depStr} - {arrStr}</span> <span className="travelTime">{travelStr}</span>
             </div>
-            <div>
-              <span className="untilTime">{"Leaves in 20m 20s"}</span>
-            </div>
           </td>
         </tr>
       );

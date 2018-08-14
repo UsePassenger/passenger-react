@@ -28,8 +28,6 @@ label.Grid-cell.ps-cellLabel {
   }
 
   .untilTime {
-    border: black 1px solid;
-    border-radius: 3px;
   }
 
   .travelTime {
@@ -172,7 +170,8 @@ label.Grid-cell.ps-cellLabel {
   }
 
   .routeEventPairTable > tr {
-    border-top: 1px #606162 solid; /* top border only */
+    /* top border only */
+    /*border-top: 1px #606162 solid;*/
   }
 
   .routeEventPairTable > tr:first-child {
@@ -181,7 +180,7 @@ label.Grid-cell.ps-cellLabel {
 
   .tableContainer > div:first-child {
     text-align: center;
-    border-bottom: 1px #606162 solid;
+    /*border-bottom: 1px #606162 solid;*/
   }
 
   .tableContainer > div:last-child {
@@ -207,8 +206,6 @@ label.Grid-cell.ps-cellLabel {
   }
 
   .untilTime {
-    border: black 1px solid;
-    border-radius: 3px;
   }
 
   .travelTime {
@@ -351,7 +348,8 @@ label.Grid-cell.ps-cellLabel {
   }
 
   .routeEventPairTable > tr {
-    border-top: 1px #606162 solid; /* top border only */
+    /* top border only */
+    /*border-top: 1px #606162 solid;*/
   }
 
   .routeEventPairTable > tr:first-child {
@@ -360,7 +358,7 @@ label.Grid-cell.ps-cellLabel {
 
   .tableContainer > div:first-child {
     text-align: center;
-    border-bottom: 1px #606162 solid;
+    /*border-bottom: 1px #606162 solid;*/
   }
 
   .tableContainer > div:last-child {
