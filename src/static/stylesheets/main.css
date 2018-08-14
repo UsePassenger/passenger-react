@@ -35,6 +35,7 @@ label.Grid-cell.ps-cellLabel {
   }
 
   .passengerFilterContainer {
+    margin-bottom: 10px;
     /*border-bottom: #808080 1px solid;*/
   }
 
@@ -213,6 +214,7 @@ label.Grid-cell.ps-cellLabel {
   }
 
   .passengerFilterContainer {
+    margin-bottom: 10px;
     /*border-bottom: #808080 1px solid;*/
   }
 

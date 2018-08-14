@@ -240,16 +240,16 @@ export var PassengerContent = React.createClass({
 
               <div className="Grid Grid-cell u-1of3">
                 <div className="Grid-cell ps-centerText">
-                  <span>Home</span>
+                  <span></span>
                 </div>
                 <div className="Grid-cell ps-centerText">
-                  <span>Chat</span>
+                  <span></span>
                 </div>
                 <div className="Grid-cell ps-centerText">
-                  <span>Maps</span>
+                  <span></span>
                 </div>
                 <div className="Grid-cell ps-centerText">
-                  <span>About</span>
+                  <span><a href={window.location.href}>link</a></span>
                 </div>
               </div>
             </div>
@@ -280,14 +280,9 @@ var PassengerRouteEventPairsList = React.createClass({
     // TODO: Need date of query and the current time to be accurate.
   },
   timeDiff: function(t1, t2) {
-    var hr1 = t1.getHours();
-    var m1 = t1.getMinutes();
-    var hr2 = t2.getHours();
-    var m2 = t2.getMinutes();
-
-    var totalm1 = hr1 * 60 + m1;
-    var totalm2 = hr2 * 60 + m2;
-    return totalm1 - totalm2;
+    // Returns the difference between dates as minutes.
+    // Expects t1 to be later than t2.
+    return (t1 - t2) / 1000 / 60;
   },
   formatTime: function(t) {
     // DEBT
