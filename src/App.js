@@ -377,7 +377,6 @@ var PassengerFilter = React.createClass({
             </div>
           </div>
           <div className="Grid-cell ps-centerText ps-filterCell-swap">
-            &#8693;
           </div>
         </div>
         <div className="Grid-cell u-1of3">
@@ -390,9 +389,6 @@ var PassengerFilter = React.createClass({
                 onChange={date => this.props.onChange('date', date)} />
             </div>
             <div className="Grid">
-              <div className="Grid-cell ps-centerText">&larr;</div>
-              <div className="Grid-cell ps-centerText">Today</div>
-              <div className="Grid-cell ps-centerText">&rarr;</div>
             </div>
           </div>
         </div>

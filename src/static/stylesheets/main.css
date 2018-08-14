@@ -1,9 +1,14 @@
 html {
-  background-color: #F3F3F3;
+  /*background-color: #F3F3F3;*/
 }
 
 body {
   margin: 0;
+}
+
+label.Grid-cell.ps-cellLabel {
+  color: white;
+  font-weight: 500;
 }
 
 @media (max-width: 750px) {
@@ -32,7 +37,7 @@ body {
   }
 
   .passengerFilterContainer {
-    border-bottom: #808080 1px solid;
+    /*border-bottom: #808080 1px solid;*/
   }
 
   .passenger-logo {
@@ -51,8 +56,8 @@ body {
     /* Required to get correct width for position:fixed */
     max-width: inherit;
     width: 100%;
-    background-color: blue;
-    border-bottom: #808080 1px solid;
+    /*background-color: blue;*/
+    /*border-bottom: #808080 1px solid;*/
   }
 
   .passengerHeaderWrapper {
@@ -118,7 +123,7 @@ body {
   }
 
   .passengerFilter > div {
-    background-color: white;
+    /*background-color: white;*/
     border-radius: 10px;
     margin: 10px 10px 10px 0;
   }
@@ -154,7 +159,7 @@ body {
   }
 
   .routeEventPairTableContainer {
-    padding-left: 22px;
+    /*padding-left: 22px;*/
   }
 
   .routeEventPairTable {
@@ -181,7 +186,7 @@ body {
 
   .tableContainer > div:last-child {
     text-align: center;
-    border-top: 1px #606162 solid;
+    /*border-top: 1px #606162 solid;*/
   }
 }
 
@@ -211,7 +216,7 @@ body {
   }
 
   .passengerFilterContainer {
-    border-bottom: #808080 1px solid;
+    /*border-bottom: #808080 1px solid;*/
   }
 
   .passenger-logo {
@@ -231,7 +236,7 @@ body {
     max-width: inherit;
     width: 100%;
     background-color: white;
-    border-bottom: #808080 1px solid;
+    /*border-bottom: #808080 1px solid;*/
   }
 
   .passengerHeaderWrapper {
@@ -297,7 +302,7 @@ body {
   }
 
   .passengerFilter > div {
-    background-color: white;
+    /*background-color: white;*/
     border-radius: 10px;
     margin: 10px 10px 10px 0;
   }
@@ -333,7 +338,7 @@ body {
   }
 
   .routeEventPairTableContainer {
-    padding-left: 22px;
+    /*padding-left: 22px;*/
   }
 
   .routeEventPairTable {
@@ -360,7 +365,7 @@ body {
 
   .tableContainer > div:last-child {
     text-align: center;
-    border-top: 1px #606162 solid;
+    /*border-top: 1px #606162 solid;*/
   }
 
 }
