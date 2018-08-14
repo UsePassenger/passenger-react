@@ -41,7 +41,7 @@ body {
     border-radius: .1em;
     position: relative;
     bottom: -7%;
-    content: url("http://usepassenger.com/images/Icon-60@3x.png");
+    content: url("/src/static/images/Icon-60@3x.png");
   }
 
   .passengerHeader {
@@ -220,7 +220,7 @@ body {
     border-radius: .1em;
     position: relative;
     bottom: -7%;
-    content: url("http://usepassenger.com/images/Icon-60@3x.png");
+    content: url("/src/static/images/Icon-60@3x.png");
   }
 
   .passengerHeader {

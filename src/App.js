@@ -14,8 +14,8 @@ const keyMap = {
 import superagent from 'superagent';
 
 require('react-widgets/dist/css/react-widgets.css');
-require('./stylesheets/main.css');
-require('./stylesheets/flex.css');
+require('./static/stylesheets/main.css');
+require('./static/stylesheets/flex.css');
 
 var DateTimePicker = require('react-widgets/lib/DateTimePicker');
 var ComboBox = require('react-widgets/lib/Combobox');
@@ -31,7 +31,7 @@ var RouteHandler = Router.RouteHandler;
 var Navigation = require('react-router').Navigation;
 
 // http://localhost:8000/api/v1/mnr/search?departure=1&destination=4&daystamp=20150904
-var baseUrl = "http://0.0.0.0:3001";
+var baseUrl = "";
 // var baseUrl = "http://pssngr.co";
 
 var StationReference = require('./StationReference');
@@ -123,7 +123,7 @@ export var PassengerContent = React.createClass({
       this.setState(newState);
     } else {
       superagent
-        .get(baseUrl + '/api/v1/mnr/search'
+        .get(baseUrl + '/api/query'
           + "?" + queryString 
           + "&daystamp=" + getDayStamp(queryParams.date))
         .end(function(err, res) {
@@ -134,9 +134,9 @@ export var PassengerContent = React.createClass({
             
             var newState = {};
 
-            var data = res.body.result;
+            var data = res.body;
 
-            var routeEventPairs = data.map(({departure, destination}) => {
+            var routeEventPairs = data.results.map(({departure, destination}) => {
               departure.date = new Date(departure.date);
               destination.date = new Date(destination.date);
               return {
@@ -280,10 +280,10 @@ var PassengerRouteEventPairsList = React.createClass({
     // TODO: Need date of query and the current time to be accurate.
   },
   timeDiff: function(t1, t2) {
-    var hr1 = parseInt(t1.slice(0,2));
-    var m1 = parseInt(t1.slice(3,5));
-    var hr2 = parseInt(t2.slice(0,2));
-    var m2 = parseInt(t2.slice(3,5));
+    var hr1 = t1.getHours();
+    var m1 = t1.getMinutes();
+    var hr2 = t2.getHours();
+    var m2 = t2.getMinutes();
 
     var totalm1 = hr1 * 60 + m1;
     var totalm2 = hr2 * 60 + m2;
@@ -291,8 +291,8 @@ var PassengerRouteEventPairsList = React.createClass({
   },
   formatTime: function(t) {
     // DEBT
-    var hr = parseInt(t.slice(0,2));
-    var m = parseInt(t.slice(3,5));
+    var hr = t.getHours();
+    var m = t.getMinutes();
     var ampm = "AM";
     if (hr > 12) {
       hr = hr % 12;
@@ -301,17 +301,21 @@ var PassengerRouteEventPairsList = React.createClass({
     if (hr === 0) {
       hr = 12;
     }
+    console.log(t);
     return hr.toString() + ":" + pad(m.toString(), 2) + ampm;
   },
   render: function() {
     var d = this.props.data.date;
     var routeEventPairs = this.props.data.data;
     var routeEventPairRows = routeEventPairs.map(function(routeEventPair, index) {
-      var depT = routeEventPair.departure.departure_time;
-      var arrT = routeEventPair.destination.departure_time;
+      var depT = routeEventPair.departure.date;
+      var arrT = routeEventPair.destination.date;
       var depStr = this.formatTime(depT);
       var arrStr = this.formatTime(arrT);
+      // var depStr = routeEventPair.departure.date.toString();
+      // var arrStr = routeEventPair.destination.date.toString();
       var travelStr = this.timeDiff(arrT, depT).toString() + "m";
+      // var travelStr = "0m";
 
       return (
         // `key` is a React-specific concept and is not mandatory for the

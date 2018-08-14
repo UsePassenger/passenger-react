@@ -30,13 +30,14 @@ app.get('/api/v1/mnr/search', function (req, res) {
     return res.status(500).send('Something broke!');
   }
 
-  var filteredRouteEventPairs = routeEventPairs.filter(({departure, destination}) => {
-    return departure.stationName.toLowerCase() === r_departure.toLowerCase()
-        && destination.stationName.toLowerCase() === r_destination.toLowerCase()
-        && getDayStamp(new Date(departure.date)) === r_daystamp;
-  });
+  // TODO: Do some real filtering.
+  // var filteredRouteEventPairs = routeEventPairs.filter(({departure, destination}) => {
+  //   return departure.stationName.toLowerCase() === r_departure.toLowerCase()
+  //       && destination.stationName.toLowerCase() === r_destination.toLowerCase()
+  //       && getDayStamp(new Date(departure.date)) === r_daystamp;
+  // });
 
-  res.send(filteredRouteEventPairs);
+  res.send(routeEventPairs);
 });
 
 var server = app.listen(3001, function () {
