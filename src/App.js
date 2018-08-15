@@ -300,7 +300,6 @@ var PassengerRouteEventPairsList = React.createClass({
     if (hr === 0) {
       hr = 12;
     }
-    console.log(t);
     return hr.toString() + ":" + pad(m.toString(), 2) + ampm;
   },
   render: function() {
