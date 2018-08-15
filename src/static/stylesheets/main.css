@@ -6,6 +6,12 @@ body {
   margin: 0;
 }
 
+.cell-title a {
+  text-decoration: none;
+  color: inherit;
+  border-bottom: none;
+}
+
 label.Grid-cell.ps-cellLabel {
   color: white;
   font-weight: 500;

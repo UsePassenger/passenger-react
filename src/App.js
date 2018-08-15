@@ -220,6 +220,10 @@ export var PassengerContent = React.createClass({
       'simpleTest': this.hotKeyHandler
     };
 
+    const titleStyle = {
+      textDecoration: 'none'
+    };
+
     return (
       <HotKeys handlers={handlers} ref="hotKeyTopLevel">
         <div className="passengerContent">
@@ -231,7 +235,7 @@ export var PassengerContent = React.createClass({
                     <img className="passenger-logo"></img>
                   </div>
                   <div className="Grid-cell cell-title">
-                    Passenger MNR
+                    <span><a href={window.location.href}>Passenger MNR</a></span>
                   </div>
                 </div>
               </div>
@@ -249,7 +253,7 @@ export var PassengerContent = React.createClass({
                   <span></span>
                 </div>
                 <div className="Grid-cell ps-centerText">
-                  <span><a href={window.location.href}>link</a></span>
+                  <span><a className="dbox-donation-button" href="https://donorbox.org/passenger-donations">donate</a></span>
                 </div>
               </div>
             </div>
