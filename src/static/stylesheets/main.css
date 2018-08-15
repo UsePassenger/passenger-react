@@ -6,23 +6,6 @@ body {
   margin: 0;
 }
 
-/* START: Fighting against bootstrap */
-
-a:hover {
-  color: #46b980;
-  text-decoration: none;
-}
-
-img {
-  vertical-align: inherit;
-}
-
-label {
-  margin-bottom: 0 !important;
-}
-
-/* END */
-
 .cell-title a {
   text-decoration: none;
   color: inherit;

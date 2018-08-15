@@ -16,6 +16,7 @@ import superagent from 'superagent';
 require('react-widgets/dist/css/react-widgets.css');
 require('./static/stylesheets/main.css');
 require('./static/stylesheets/flex.css');
+require('./static/stylesheets/bootstrap-theme.css');
 
 var DateTimePicker = require('react-widgets/lib/DateTimePicker');
 var ComboBox = require('react-widgets/lib/Combobox');

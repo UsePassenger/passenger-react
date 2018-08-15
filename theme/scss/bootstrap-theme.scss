@@ -1,0 +1,22 @@
+@import 'config';
+
+body {
+  font: 300 1em/1.4 'Open Sans', sans-serif;
+}
+
+img {
+  vertical-align: inherit;
+}
+
+label {
+  margin-bottom: 0;
+}
+
+a {
+  color: #46b980;
+}
+
+a:hover {
+  color: #46b980;
+  text-decoration: none;
+}

@@ -36,3 +36,12 @@ NOTE: When there are errors, it is probably best to refresh.
 # To Open
 
 http://pssngr.co/mnr/timetable?departure=1&destination=4
+
+## Building the theme
+
+This generate the file `bootstrap-theme.css`.
+
+```
+npm install -g sass
+sass --watch theme/scss:src/static/stylesheets
+```
