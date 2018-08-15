@@ -1481,10 +1481,13 @@ label {
 
 a {
   color: #46b980;
+  border-bottom: 1px dashed rgba(70, 185, 128, 0.5);
 }
 
+a:focus,
 a:hover {
   color: #46b980;
+  border-bottom: 1px solid #46b980;
   text-decoration: none;
 }
 

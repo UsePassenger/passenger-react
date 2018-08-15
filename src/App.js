@@ -15,7 +15,6 @@ import superagent from 'superagent';
 
 require('react-widgets/dist/css/react-widgets.css');
 require('./static/stylesheets/main.css');
-require('./static/stylesheets/flex.css');
 require('./static/stylesheets/bootstrap-theme.css');
 
 var DateTimePicker = require('react-widgets/lib/DateTimePicker');
@@ -228,42 +227,30 @@ export var PassengerContent = React.createClass({
     return (
       <HotKeys handlers={handlers} ref="hotKeyTopLevel">
         <div className="passengerContent">
-          <div className="passengerHeader">
-            <div className="Grid passengerHeaderWrapper">
-              <div className="Grid-cell">
-                <div className="Grid">
-                  <div className="Grid-cell cell-logo">
-                    <img className="passenger-logo"></img>
-                  </div>
-                  <div className="Grid-cell cell-title">
-                    <span><a href={window.location.href}>Passenger MNR</a></span>
-                  </div>
+          <div className="passengerHeader row">
+            <div className="passengerHeaderWrapper col-12">
+              <div className="row">
+                <div className="col-1 cell-logo">
+                  <img className="passenger-logo"></img>
                 </div>
-              </div>
-
-              <div className="Grid-cell"></div>
-
-              <div className="Grid Grid-cell u-1of3">
-                <div className="Grid-cell ps-centerText">
-                  <span></span>
+                <div className="col-5 cell-title">
+                  <span><a href={window.location.href}>Passenger MNR</a></span>
                 </div>
-                <div className="Grid-cell ps-centerText">
-                  <span></span>
-                </div>
-                <div className="Grid-cell ps-centerText">
-                  <span></span>
-                </div>
-                <div className="Grid-cell ps-centerText">
+                <div className="col-6 ps-donate">
                   <span><a className="dbox-donation-button" href="https://donorbox.org/passenger-donations">donate</a></span>
                 </div>
               </div>
             </div>
           </div>
-          <div className="passengerTimetableContainer">
-            <div className="passengerFilterContainer">
-              <PassengerFilter data={this.state} onChange={this.onChange} />
+          <div className="row">
+            <div className="col-12">
+              <div className="passengerTimetableContainer">
+                <div className="passengerFilterContainer">
+                  <PassengerFilter data={this.state} onChange={this.onChange} />
+                </div>
+                <PassengerRouteEventPairsList data={this.state}/>
+              </div>
             </div>
-            <PassengerRouteEventPairsList data={this.state}/>
           </div>
         </div>
       </HotKeys>
@@ -350,42 +337,34 @@ var PassengerFilter = React.createClass({
     };
 
     return (
-      <div className="Grid passengerFilter">
-        <div className="Grid Grid-cell">
-          <div className="Grid-cell passengerFilter-cell">
-            <div className="Grid">
-              <label className="Grid-cell ps-cellLabel">From</label>
-              <ComboBox className="Grid-cell"
-                data={stationArray}
-                value={this.props.data.departure} 
-                valueField='stop_id' textField='stop_name'
-                filter={filterStation}
-                onChange={station => this.props.onChange('departure', station.stop_id)} />
-            </div>
-            <div className="Grid">
-              <label className="Grid-cell ps-cellLabel">To</label>
-              <ComboBox className="Grid-cell ps-station"
-                data={stationArray}
-                value={this.props.data.destination}
-                valueField='stop_id' textField='stop_name'
-                filter={filterStation}
-                onChange={station => this.props.onChange('destination', station.stop_id)} />
-            </div>
+      <div className="row passengerFilter">
+        <div className="col-8 passengerFilter-cell">
+          <div className="form-group row">
+            <label className="col-3 col-form-label ps-cellLabel">From</label>
+            <ComboBox className="col-9 ps-cellInput"
+              data={stationArray}
+              value={this.props.data.departure} 
+              valueField='stop_id' textField='stop_name'
+              filter={filterStation}
+              onChange={station => this.props.onChange('departure', station.stop_id)} />
           </div>
-          <div className="Grid-cell ps-centerText ps-filterCell-swap">
+          <div className="form-group row">
+            <label className="col-3 col-form-label ps-cellLabel">To</label>
+            <ComboBox className="col-9  ps-cellInput ps-station"
+              data={stationArray}
+              value={this.props.data.destination}
+              valueField='stop_id' textField='stop_name'
+              filter={filterStation}
+              onChange={station => this.props.onChange('destination', station.stop_id)} />
           </div>
         </div>
-        <div className="Grid-cell u-1of3">
-          <div className="Grid passengerFilter-cell">
-            <div className="Grid">
-              <label className="Grid-cell ps-cellLabel">Date</label>
-              <DateTimePicker className="Grid-cell"
-                time={false}
-                value={this.props.data.date}
-                onChange={date => this.props.onChange('date', date)} />
-            </div>
-            <div className="Grid">
-            </div>
+        <div className="col-4 passengerFilter-cell">
+          <div className="form-group row">
+            <label className="col-3 col-form-label ps-cellLabel">Date</label>
+            <DateTimePicker className="col-9 ps-cellInput"
+              time={false}
+              value={this.props.data.date}
+              onChange={date => this.props.onChange('date', date)} />
           </div>
         </div>
       </div>

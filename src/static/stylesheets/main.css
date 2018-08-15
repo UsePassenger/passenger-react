@@ -6,13 +6,71 @@ body {
   margin: 0;
 }
 
+.container {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.passengerHeader {
+  width: 750px !important;
+  margin: 0 auto !important;
+}
+
+.passengerHeaderWrapper {
+  padding: 0;
+}
+
+.passengerFilter {
+  background-color: #08B63D;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding: 10px;
+}
+
+.cell-logo {
+  -webkit-box-flex: 0 0 44px !important;
+  -webkit-flex: 0 0 44px !important;
+  -ms-flex: 0 0 44px !important;
+  flex: 0 0 44px !important;
+}
+
+.ps-cellInput {
+  padding: 0 !important;
+  /*flex: 0 0 80% !important;*/
+  /*max-width: 80% !important;*/
+}
+
+.passengerFilter-cell {
+  /*margin: 10px !important;*/
+  padding: 0 !important;
+}
+
+.passengerFilter-cell .form-group {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .cell-title a {
+  color: #000;
   text-decoration: none;
-  color: inherit;
   border-bottom: none;
 }
 
-label.Grid-cell.ps-cellLabel {
+.cell-title a:focus,
+.cell-title a:hover {
+  color: #000;
+}
+
+.ps-donate {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: right;
+}
+
+label.ps-cellLabel {
+  padding-left: 0;
+  padding-right: 10px;
   color: white;
   font-weight: 500;
 }
@@ -54,34 +112,11 @@ label.Grid-cell.ps-cellLabel {
     content: url("/src/static/images/Icon-60@3x.png");
   }
 
-  .passengerHeader {
-    /*position: fixed;*/
-    z-index: 1;
-
-    /* Required to get correct width for position:fixed */
-    max-width: inherit;
-    width: 100%;
-    /*background-color: blue;*/
-    /*border-bottom: #808080 1px solid;*/
-  }
-
-  .passengerHeaderWrapper {
-    width: 750px !important;
-    margin: 0 auto !important;
-  }
-
   .ps-filterCell-swap {
     -webkit-box-flex: 0 0 60px !important;
     -webkit-flex: 0 0 60px !important;
     -ms-flex: 0 0 60px !important;
     flex: 0 0 60px !important;
-  }
-
-  .cell-logo {
-    -webkit-box-flex: 0 0 44px !important;
-    -webkit-flex: 0 0 44px !important;
-    -ms-flex: 0 0 44px !important;
-    flex: 0 0 44px !important;
   }
 
   .cell-title {
@@ -123,14 +158,10 @@ label.Grid-cell.ps-cellLabel {
     justify-content: center;
   }
 
-  .passengerFilter {
-    background-color: #08B63D;
-  }
-
   .passengerFilter > div {
     /*background-color: white;*/
     border-radius: 10px;
-    margin: 10px 10px 10px 0;
+    /*margin: 10px 10px 10px 0;*/
   }
 
   .passengerFilter-cell > div {
@@ -139,7 +170,7 @@ label.Grid-cell.ps-cellLabel {
   }
 
   .passengerFilter > div:first-child {
-    margin: 10px;
+    /*margin: 10px;*/
   }
 
   .passengerFilter > div:nth-child(2) {
@@ -233,34 +264,11 @@ label.Grid-cell.ps-cellLabel {
     content: url("/src/static/images/Icon-60@3x.png");
   }
 
-  .passengerHeader {
-    /*position: fixed;*/
-    z-index: 1;
-
-    /* Required to get correct width for position:fixed */
-    max-width: inherit;
-    width: 100%;
-    background-color: white;
-    /*border-bottom: #808080 1px solid;*/
-  }
-
-  .passengerHeaderWrapper {
-    width: 750px !important;
-    margin: 0 auto !important;
-  }
-
   .ps-filterCell-swap {
     -webkit-box-flex: 0 0 60px !important;
     -webkit-flex: 0 0 60px !important;
     -ms-flex: 0 0 60px !important;
     flex: 0 0 60px !important;
-  }
-
-  .cell-logo {
-    -webkit-box-flex: 0 0 44px !important;
-    -webkit-flex: 0 0 44px !important;
-    -ms-flex: 0 0 44px !important;
-    flex: 0 0 44px !important;
   }
 
   .cell-title {
@@ -302,14 +310,10 @@ label.Grid-cell.ps-cellLabel {
     justify-content: center;
   }
 
-  .passengerFilter {
-    background-color: #08B63D;
-  }
-
   .passengerFilter > div {
     /*background-color: white;*/
     border-radius: 10px;
-    margin: 10px 10px 10px 0;
+    /*margin: 10px 10px 10px 0;*/
   }
 
   .passengerFilter-cell > div {
@@ -318,7 +322,7 @@ label.Grid-cell.ps-cellLabel {
   }
 
   .passengerFilter > div:first-child {
-    margin: 10px;
+    /*margin: 10px;*/
   }
 
   .passengerFilter > div:nth-child(2) {
